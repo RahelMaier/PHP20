@@ -22,8 +22,6 @@ return $this->_fval / $this->_sval;
 }
 }
 $mycalc = new MyCalculator(16, 2); 
-$mycalc = new MyCalculator(70, 2); 
-
 echo $mycalc-> add()."\n"; 
 echo $mycalc-> multiply()."\n"; 
 echo $mycalc-> subtract()."\n"; 
