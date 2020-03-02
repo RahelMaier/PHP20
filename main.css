@@ -1,4 +1,9 @@
-body {
+<!DOCTYPE html>
+<html>
+<head>
+</style>
+
+-body {
     font-family: Arial, Helvetica, sans-serif;
 }
 main {
@@ -29,3 +34,123 @@ input, select {
 br {
     clear: left;
 }
+
+</style>
+    <title>String Tester</title>
+    <link rel="stylesheet" type="text/css" href="main.css">
+</head>
+
+<body>
+    <main>
+        <h1>String Tester</h1>
+        <form action="." method="post">
+        <input type="hidden" name="action" value="process_data">
+
+        <label>Name:</label>
+        <input type="text" name="name" 
+               value="<?php echo htmlspecialchars($name); ?>">
+        <br>
+
+        <label>E-Mail:</label>
+        <input type="text" name="email" 
+               value="<?php echo htmlspecialchars($email); ?>">
+        <br>
+
+        <label>Phone Number:</label>
+        <input type="text" name="phone" 
+               value="<?php echo htmlspecialchars($phone); ?>">
+        <br>
+
+        <label>&nbsp;</label>
+        <input type="submit" value="Submit">
+        <br>
+
+        </form>
+
+        <h2>Message:</h2>
+        <p><?php echo nl2br(htmlspecialchars($message)); ?></p>
+
+    </main>
+<?php
+//set default values
+$name = '';
+$email = '';
+$phone = '';
+$message = 'Enter some data and click on the Submit button.';
+
+//process
+$action = filter_input(INPUT_POST, 'action');
+
+switch ($action) {
+    case 'process_data':
+        $name = filter_input(INPUT_POST, 'name');
+        $email = filter_input(INPUT_POST, 'email');
+        $phone = filter_input(INPUT_POST, 'phone');
+
+        // trim the spaces from the start and end of all data
+       
+        // validate that name is not empty
+       
+        // capitalize the first letters only of the name
+
+
+        // get first name from complete name  
+        $i = strpos($name, ' ');
+        if ($i === false) {
+            $first_name = $name;
+        } else {
+            $first_name = substr($name, 0, $i);
+        }
+
+        // validate email
+        if (empty($email)) {
+            $message = 'You must enter an email address.';
+            break;
+        } else if(strpos($email, '@') === false) {
+            $message = 'The email address must contain an @ sign.';
+            break;
+        } else if(strpos($email, '.') === false) {
+            $message = 'The email address must contain a dot character.';
+            break;
+        }
+
+        // remove common formatting characters from the phone number
+        $phone = str_replace('-', '', $phone);
+        $phone = str_replace('(', '', $phone);
+        $phone = str_replace(')', '', $phone);
+        $phone = str_replace(' ', '', $phone);
+
+        // validate the phone number
+        if (strlen($phone) < 7) {
+            $message = 'The phone number must contain at least seven digits.';
+            break;
+        }
+
+        // format the phone number
+        if (strlen($phone) == 7) {
+            $part1 = substr($phone, 0, 3);
+            $part2 = substr($phone, 3);
+            $phone = $part1 . '-' . $part2;
+        } else {
+            $part1 = substr($phone, 0, 3);
+            $part2 = substr($phone, 3, 3);
+            $part3 = substr($phone, 6);
+            $phone = $part1 . '-' . $part2 . '-' . $part3;
+        }
+
+        // format the message
+        $message =
+            "Hello $first_name,\n\n" .
+            "Thank you for entering this data:\n\n" .
+            "Name: $name\n" .
+            "Email: $email\n" .
+            "Phone: $phone\n";
+
+        break;
+}
+
+
+
+?>
+</body>
+</html>
